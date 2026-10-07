@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ky" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IT EDU — IT окутуунун методдору</title>
+<meta name="description" content="IT үйрөнүүнүн заманбап методдору: практика, долбоорлор, оюн элементтери.">
+<style>
+/* ===== Tokens ===== */
+:root{
+  --navy:#0a0e27; --navy2:#121838; --blue:#2f6bff; --purple:#8b5cf6;
+  --grad:linear-gradient(135deg,var(--blue),var(--purple));
+  --bg:#0a0e27; --bg2:#0f1533; --text:#eef1ff; --muted:#a9b2d6;
+  --card:rgba(255,255,255,.06); --line:rgba(255,255,255,.12);
+  --shadow:0 10px 30px rgba(0,0,0,.35); --r:20px;
+  --font:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+}
+[data-theme=light]{
+  --bg:#ffffff; --bg2:#f2f5ff; --text:#0a0e27; --muted:#4a5278;
+  --card:#fff; --line:rgba(10,14,39,.1); --shadow:0 10px 30px rgba(47,107,255,.12);
+}
+/* ===== Base (mobile-first) ===== */
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;transition:background .3s,color .3s}
+a{color:inherit;text-decoration:none}
+ul,ol{list-style:none;padding:0}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.container{width:min(1140px,92%);margin-inline:auto}
+.skip{position:absolute;left:-999px}.skip:focus{left:10px;top:10px;background:#fff;color:#000;padding:8px;z-index:99}
+h1{font-size:clamp(2.1rem,6vw,3.8rem);line-height:1.1;letter-spacing:-.02em}
+h2{font-size:clamp(1.6rem,4vw,2.4rem);margin-bottom:2rem;letter-spacing:-.01em}
+.lead{color:var(--muted);font-size:1.15rem;margin:1rem 0 1.5rem;max-width:52ch}
+.section{padding:5rem 0}
+.section.light{background:var(--bg2)}
+.narrow{max-width:760px}
+/* ===== Buttons ===== */
+.btn{display:inline-block;padding:.8rem 1.5rem;border-radius:999px;font-weight:600;border:1px solid transparent;cursor:pointer;font:inherit;font-weight:600;transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:0 8px 24px rgba(79,70,229,.4)}
+.btn-ghost{border-color:var(--line);color:var(--text);background:var(--card)}
+.btns{display:flex;gap:1rem;flex-wrap:wrap}
+.icon-btn{background:var(--card);border:1px solid var(--line);border-radius:50%;width:40px;height:40px;cursor:pointer;color:var(--text)}
+/* ===== Header ===== */
+.header{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:color-mix(in srgb,var(--bg) 80%,transparent);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;gap:.8rem;height:68px}
+.logo{font-weight:800;font-size:1.4rem;margin-right:auto}
+.logo span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;margin-left:.15em}
+.menu{position:absolute;top:68px;left:0;right:0;flex-direction:column;background:var(--bg);padding:1rem 4%;display:flex;gap:.5rem;
+  border-bottom:1px solid var(--line);transform:translateY(-130%);opacity:0;transition:.35s;z-index:-1}
+.menu.open{transform:none;opacity:1}
+.menu a{display:block;padding:.5rem 0;color:var(--muted);font-weight:500}
+.menu a:hover,.menu a.active{color:var(--text)}
+.menu a.active{border-bottom:2px solid var(--blue)}
+.nav-cta{display:none}
+.burger{background:none;border:0;width:40px;height:40px;cursor:pointer;display:grid;place-content:center;gap:5px}
+.burger span{width:24px;height:2px;background:var(--text);transition:.3s}
+.burger[aria-expanded=true] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger[aria-expanded=true] span:nth-child(2){opacity:0}
+.burger[aria-expanded=true] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+/* ===== Hero ===== */
+.hero{position:relative;overflow:hidden;padding:4rem 0 5rem;background:radial-gradient(circle at 20% 0,#1b2466,var(--navy) 60%);color:#eef1ff}
+.hero .lead{color:#b9c2ee}
+.hero .btn-ghost{color:#fff}
+.hero h1{background:linear-gradient(90deg,#fff,#b9c8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-grid{display:grid;gap:3rem;position:relative}
+.blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.5;animation:drift 14s ease-in-out infinite alternate}
+.b1{width:360px;height:360px;background:var(--blue);top:-100px;left:-80px}
+.b2{width:320px;height:320px;background:var(--purple);bottom:-100px;right:-60px;animation-delay:-6s}
+@keyframes drift{to{transform:translate(60px,40px) scale(1.15)}}
+.stats{display:flex;gap:2rem;margin-top:2.5rem;flex-wrap:wrap}
+.stats dt{font-size:2rem;font-weight:800}.stats dd{color:#b9c2ee;font-size:.9rem;margin:0}
+.art{position:relative;min-height:300px;display:grid;place-items:center}
+.orb{width:230px;height:230px;border-radius:50%;background:var(--grad);box-shadow:0 0 90px rgba(139,92,246,.7);animation:pulse 5s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.07)}}
+.glass{background:var(--card);border:1px solid var(--line);backdrop-filter:blur(14px);border-radius:var(--r);box-shadow:var(--shadow)}
+.win{position:absolute;width:210px;height:140px;padding:14px;display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;background:rgba(255,255,255,.1);color:#fff}
+.win i{width:10px;height:10px;border-radius:50%;background:#fff;opacity:.6}
+.win code{width:100%;font-size:2.4rem;text-align:center;margin-top:12px}
+.float{position:absolute;font:700 1.2rem ui-monospace,Consolas,monospace;padding:.5rem .9rem;border-radius:14px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);animation:bob 6s ease-in-out infinite}
+.f1{top:8%;left:10%}.f2{top:15%;right:8%;animation-delay:-2s}.f3{bottom:12%;left:15%;animation-delay:-4s}.f4{bottom:8%;right:12%;animation-delay:-1s}
+@keyframes bob{50%{transform:translateY(-16px)}}
+/* ===== Grids / cards ===== */
+.grid{display:grid;gap:1.5rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1.75rem;box-shadow:var(--shadow);transition:transform .3s,border-color .3s}
+.card:hover{transform:translateY(-6px);border-color:var(--blue)}
+.card h3{margin:.8rem 0 .4rem}
+.card p{color:var(--muted);margin-bottom:1rem}
+.ico{display:grid;place-items:center;width:54px;height:54px;border-radius:16px;background:var(--grad);font-size:1.6rem;transition:transform .4s}
+.card:hover .ico{transform:rotate(-8deg) scale(1.1)}
+.more{background:none;border:1px solid var(--line);color:var(--text);padding:.45rem 1rem;border-radius:999px;cursor:pointer;font:inherit}
+.more:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
+.extra{max-height:0;overflow:hidden;transition:max-height .35s;color:var(--muted)}
+.card.open .extra{max-height:140px;margin-bottom:1rem}
+.tag{display:inline-block;font-size:.8rem;padding:.15rem .7rem;border-radius:999px;background:rgba(47,107,255,.15);color:var(--blue);font-weight:600}
+.check li::before{content:"✓";color:var(--blue);font-weight:800;margin-right:.6rem}
+.check li{padding:.3rem 0}
+blockquote{font-size:1.05rem;margin-bottom:1rem}
+figcaption{display:flex;align-items:center;gap:.7rem;font-weight:600}
+.av{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--grad);color:#fff}
+/* ===== Timeline ===== */
+.timeline{display:grid;gap:1rem}
+.timeline li{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;border-radius:var(--r);background:var(--card);border:1px solid var(--line);font-weight:600;font-size:1.1rem}
+.timeline b{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--grad);color:#fff}
+/* ===== Editor ===== */
+.split{display:grid;gap:2.5rem;align-items:center}
+.editor{background:#0b1030;color:#e6e9ff;border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.bar{display:flex;gap:6px;align-items:center;padding:.7rem 1rem;background:#161c45}
+.bar i{width:11px;height:11px;border-radius:50%;background:#ff5f56}.bar i:nth-child(2){background:#ffbd2e}.bar i:nth-child(3){background:#27c93f}
+.bar span{margin-left:auto;font-size:.8rem;color:#9aa4d6}
+.editor pre{padding:1.5rem;overflow-x:auto;font:1rem/1.8 ui-monospace,Consolas,monospace}
+.editor em{font-style:normal;color:#7aa2ff}
+/* ===== Dashboards ===== */
+.dash,.dash2{padding:1.75rem}
+.dash-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1rem}
+.dash-top small,.dash2 small{display:block;color:var(--muted)}
+.dash-top strong{font-size:1.4rem}
+.bar-track{height:12px;border-radius:99px;background:var(--line);overflow:hidden;margin:.4rem 0 .3rem}
+.fill{height:100%;width:0;border-radius:99px;background:var(--grad);transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.badges{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.5rem}
+.badges li{padding:.5rem 1rem;border-radius:999px;background:var(--bg2);border:1px solid var(--line);font-weight:600;transition:transform .2s}
+.badges li:hover{transform:scale(1.07)}
+.dash2{display:grid;gap:2rem}
+.dash2 h3{margin:1rem 0 .3rem;font-size:1rem}
+.chart{display:flex;align-items:flex-end;gap:.6rem;height:150px}
+.chart i{flex:1;height:var(--h);border-radius:8px 8px 0 0;background:var(--grad);transform-origin:bottom;transform:scaleY(0);transition:transform .8s}
+.dash2.in .chart i{transform:none}
+.meta{margin-top:1rem;color:var(--muted)}
+/* ===== FAQ ===== */
+.faq-item{border:1px solid var(--line);border-radius:14px;margin-bottom:.8rem;background:var(--card);overflow:hidden}
+.faq-item button{all:unset;box-sizing:border-box;width:100%;padding:1rem 1.25rem;cursor:pointer;font-weight:600;display:flex;justify-content:space-between}
+.faq-item button::after{content:"+";transition:transform .3s}
+.faq-item button[aria-expanded=true]::after{transform:rotate(45deg)}
+.faq-item p{max-height:0;overflow:hidden;padding:0 1.25rem;color:var(--muted);transition:max-height .3s,padding .3s}
+.faq-item.open p{max-height:120px;padding-bottom:1rem}
+/* ===== Form / footer ===== */
+.form{padding:1.75rem;display:grid;gap:1rem}
+label{display:grid;gap:.4rem;font-weight:600}
+input,textarea{font:inherit;padding:.8rem 1rem;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--text)}
+input.err,textarea.err{border-color:#ff5c7a}
+.status{min-height:1.4em;font-size:.95rem}
+.social{display:flex;gap:.7rem;margin-top:1rem}
+.social a{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--card);border:1px solid var(--line);transition:transform .2s}
+.social a:hover{transform:translateY(-3px)}
+.footer{background:var(--navy);color:#cfd6ff;padding:3rem 0 1rem}
+.foot{display:grid;gap:2rem}
+.footer h4{margin-bottom:.6rem;color:#fff}
+.footer a:not(.logo):not(.social a){display:block;padding:.15rem 0}
+.footer p{color:#9aa4d6}
+.copy{text-align:center;margin-top:2rem;font-size:.9rem}
+.to-top{position:fixed;right:1.2rem;bottom:1.2rem;width:46px;height:46px;border:0;border-radius:50%;background:var(--grad);color:#fff;font-size:1.2rem;cursor:pointer;opacity:0;pointer-events:none;transition:.3s}
+.to-top.show{opacity:1;pointer-events:auto}
+/* ===== Scroll reveal ===== */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s,transform .6s}
+.reveal.in{opacity:1;transform:none}
+/* ===== Breakpoints ===== */
+@media(min-width:640px){.cards{grid-template-columns:repeat(2,1fr)}.why{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:repeat(2,1fr)}.timeline{grid-template-columns:repeat(5,1fr)}.timeline li{flex-direction:column;text-align:center}.foot{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:960px){
+  .burger{display:none}.nav-cta{display:inline-block}
+  .menu{position:static;flex-direction:row;padding:0;border:0;transform:none;opacity:1;background:none;z-index:auto;gap:1.4rem}
+  .cards{grid-template-columns:repeat(3,1fr)}.why{grid-template-columns:repeat(4,1fr)}
+  .hero-grid,.split,.dash2{grid-template-columns:1fr 1fr;align-items:center}
+  .foot{grid-template-columns:2fr 1fr 1fr 1fr}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}html{scroll-behavior:auto}}
+
+/* ===== Extra visual polish: backgrounds & depth ===== */
+body{background:
+  radial-gradient(900px 500px at 90% -5%,rgba(139,92,246,.18),transparent 60%),
+  radial-gradient(800px 500px at -10% 40%,rgba(47,107,255,.16),transparent 60%),
+  var(--bg);background-attachment:fixed}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
+  background-size:48px 48px;-webkit-mask-image:radial-gradient(circle at 50% 40%,#000,transparent 75%);mask-image:radial-gradient(circle at 50% 40%,#000,transparent 75%)}
+.hero{min-height:88vh;display:flex;align-items:center}
+.hero-grid{width:min(1140px,92%)}
+.section{position:relative;overflow:hidden}
+.section.light{background:linear-gradient(180deg,var(--bg2),color-mix(in srgb,var(--bg2) 70%,var(--purple) 8%))}
+.section:not(.light)::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;filter:blur(110px);opacity:.18;background:var(--grad);top:-120px;right:-120px;pointer-events:none}
+.section.light::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:radial-gradient(var(--line) 1.2px,transparent 1.2px);background-size:26px 26px}
+.section>.container{position:relative;z-index:1}
+h2{position:relative;padding-bottom:.9rem}
+h2::after{content:"";position:absolute;left:0;bottom:0;width:64px;height:4px;border-radius:4px;background:var(--grad)}
+.card{background:linear-gradient(160deg,color-mix(in srgb,var(--card) 100%,#fff 4%),var(--card));position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--grad);transform:scaleX(0);transform-origin:left;transition:transform .4s}
+.card:hover::before{transform:scaleX(1)}
+.card:hover{box-shadow:0 18px 40px rgba(79,70,229,.28)}
+.orb{background:radial-gradient(circle at 30% 30%,#7aa2ff,var(--blue) 40%,var(--purple))}
+.art::before,.art::after{content:"";position:absolute;border-radius:50%;border:1px dashed rgba(255,255,255,.25);animation:spin 30s linear infinite}
+.art::before{width:320px;height:320px}.art::after{width:420px;height:420px;animation-direction:reverse;animation-duration:45s}
+@keyframes spin{to{transform:rotate(360deg)}}
+.win{top:58%;left:50%;margin:-30px 0 0 -40px}
+.footer{background:linear-gradient(180deg,var(--navy2),var(--navy))}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Мазмунга өтүү</a>
+
+<!-- Header -->
+<header class="header" id="header">
+  <nav class="nav container" aria-label="Башкы меню">
+    <a href="#home" class="logo">IT<span>EDU</span></a>
+    <ul class="menu" id="menu">
+      <li><a href="#home">Башкы бет</a></li>
+      <li><a href="#methods">Окутуу методдору</a></li>
+      <li><a href="#courses">Курстар</a></li>
+      <li><a href="#materials">Материалдар</a></li>
+      <li><a href="#about">Биз жөнүндө</a></li>
+      <li><a href="#contact">Байланыш</a></li>
+    </ul>
+    <button class="icon-btn" id="themeBtn" aria-label="Түнкү/күндүзгү режим">🌓</button>
+    <a href="#courses" class="btn btn-primary nav-cta">Баштоо</a>
+    <button class="burger" id="burger" aria-label="Менюну ачуу" aria-expanded="false"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<main id="main">
+<!-- Hero -->
+<section class="hero" id="home">
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div class="container hero-grid">
+    <div>
+      <h1>IT үйрөнүүнүн заманбап методдору</h1>
+      <p class="lead">Технологияны жөн гана үйрөнбөстөн, аны туура метод менен өздөштүр.</p>
+      <div class="btns">
+        <a href="#courses" class="btn btn-primary">Окууну баштоо</a>
+        <a href="#methods" class="btn btn-ghost">Методдорду көрүү</a>
+      </div>
+      <dl class="stats">
+        <div><dt><span class="count" data-to="10">0</span>+</dt><dd>Окутуу методу</dd></div>
+        <div><dt><span class="count" data-to="500">0</span>+</dt><dd>Студент</dd></div>
+        <div><dt><span class="count" data-to="20">0</span>+</dt><dd>Практикалык сабак</dd></div>
+      </dl>
+    </div>
+    <div class="art" aria-hidden="true">
+      <div class="orb"></div>
+      <div class="glass win"><i></i><i></i><i></i><code>&lt;/&gt;</code></div>
+      <span class="float f1">{ }</span><span class="float f2">JS</span>
+      <span class="float f3">&lt;/&gt;</span><span class="float f4">py</span>
+    </div>
+  </div>
+</section>
+
+<!-- Methods -->
+<section class="section light" id="methods">
+  <div class="container">
+    <h2>IT окутуунун негизги методдору</h2>
+    <div class="grid cards" id="methodGrid"></div>
+  </div>
+</section>
+
+<!-- Timeline -->
+<section class="section" id="process">
+  <div class="container">
+    <h2>Интерактивдүү окуу процесси</h2>
+    <ol class="timeline">
+      <li class="reveal"><b>1</b>Теория</li>
+      <li class="reveal"><b>2</b>Практика</li>
+      <li class="reveal"><b>3</b>Долбоор</li>
+      <li class="reveal"><b>4</b>Текшерүү</li>
+      <li class="reveal"><b>5</b>Натыйжа</li>
+    </ol>
+  </div>
+</section>
+
+<!-- Code -->
+<section class="section light" id="materials">
+  <div class="container split">
+    <div>
+      <h2>Код жазып үйрөн</h2>
+      <p class="lead">Ар бир сабакта өз колуң менен жаз, натыйжаны дароо көр.</p>
+      <a href="#courses" class="btn btn-primary">Практиканы баштоо</a>
+    </div>
+    <div class="editor reveal" role="img" aria-label="Код редактор">
+      <div class="bar"><i></i><i></i><i></i><span>index.html</span></div>
+<pre><code><em>&lt;h1&gt;</em>Hello, IT World!<em>&lt;/h1&gt;</em>
+<em>&lt;p&gt;</em>Learning by doing 🚀<em>&lt;/p&gt;</em></code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- Gamification -->
+<section class="section" id="game">
+  <div class="container">
+    <h2>Окуу — оюн сыяктуу</h2>
+    <div class="glass dash reveal">
+      <div class="dash-top">
+        <div><small>Деңгээл</small><strong>Beginner</strong></div>
+        <div><small>Бүткөн сабактар</small><strong>18</strong></div>
+        <div><small>XP</small><strong>750 / 1000</strong></div>
+      </div>
+      <div class="bar-track" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"><div class="fill" data-w="75"></div></div>
+      <ul class="badges">
+        <li>🏆 First Project</li><li>🔥 7 Day Streak</li><li>💻 Coding Master</li><li>🚀 Fast Learner</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Courses -->
+<section class="section light" id="courses">
+  <div class="container">
+    <h2>Курстар</h2>
+    <div class="grid cards" id="courseGrid"></div>
+  </div>
+</section>
+
+<!-- Why -->
+<section class="section" id="about">
+  <div class="container">
+    <h2>Эмне үчүн биз?</h2>
+    <div class="grid why">
+      <article class="card reveal"><span class="ico">🎯</span><h3>Практикага багытталган</h3></article>
+      <article class="card reveal"><span class="ico">⚡</span><h3>Заманбап технологиялар</h3></article>
+      <article class="card reveal"><span class="ico">🧩</span><h3>Интерактивдүү окутуу</h3></article>
+      <article class="card reveal"><span class="ico">🤝</span><h3>Ар бир студентке ыңгайлуу</h3></article>
+    </div>
+  </div>
+</section>
+
+<!-- Teachers / students -->
+<section class="section light">
+  <div class="container">
+    <h2>Мугалим үчүн да, студент үчүн да ыңгайлуу</h2>
+    <div class="grid two">
+      <article class="card reveal"><h3>👨‍🏫 Мугалимдер үчүн</h3><ul class="check"><li>Сабакты пландаштыруу</li><li>Интерактивдүү материалдар</li><li>Студенттерди көзөмөлдөө</li></ul></article>
+      <article class="card reveal"><h3>🎓 Студенттер үчүн</h3><ul class="check"><li>Өз алдынча окуу</li><li>Практикалык тапшырмалар</li><li>Progress tracking</li></ul></article>
+    </div>
+  </div>
+</section>
+
+<!-- Progress dashboard -->
+<section class="section">
+  <div class="container">
+    <h2>Прогресс панели</h2>
+    <div class="glass dash2 reveal">
+      <div>
+        <h3>Курстун прогресси</h3>
+        <div class="bar-track"><div class="fill" data-w="68"></div></div><small>68%</small>
+        <h3>Skill level</h3>
+        <div class="bar-track"><div class="fill" data-w="45"></div></div><small>Intermediate • 45%</small>
+      </div>
+      <div>
+        <h3>Жумалык активдүүлүк</h3>
+        <div class="chart" role="img" aria-label="Жумалык активдүүлүк диаграммасы">
+          <i style="--h:40%"></i><i style="--h:65%"></i><i style="--h:50%"></i><i style="--h:90%"></i><i style="--h:70%"></i><i style="--h:30%"></i><i style="--h:80%"></i>
+        </div>
+        <p class="meta">🔥 Learning streak: 7 күн &nbsp; ✅ Бүткөн сабактар: 18</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section light">
+  <div class="container">
+    <h2>Студенттердин пикири</h2>
+    <div class="grid cards">
+      <figure class="card reveal"><blockquote>Бул методдор менен программалоону үйрөнүү мага бир топ жеңил болду.</blockquote><figcaption><span class="av">А</span>Айбек</figcaption></figure>
+      <figure class="card reveal"><blockquote>Практикалык тапшырмалар теорияны тез түшүнүүгө жардам берди.</blockquote><figcaption><span class="av">Н</span>Нурайым</figcaption></figure>
+      <figure class="card reveal"><blockquote>Сайттын интерфейси абдан ыңгайлуу жана заманбап.</blockquote><figcaption><span class="av">Э</span>Эрлан</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="container narrow">
+    <h2>Көп берилүүчү суроолор</h2>
+    <div class="faq">
+      <div class="faq-item"><button aria-expanded="false">Баштоо үчүн тажрыйба керекпи?</button><p>Жок, курстар баштоочулар үчүн да ылайыкташкан.</p></div>
+      <div class="faq-item"><button aria-expanded="false">Сабактар канча убакытка созулат?</button><p>Ар бир сабак 20–40 мүнөт, өз ылдамдыгыңда окуйсуң.</p></div>
+      <div class="faq-item"><button aria-expanded="false">Мугалимдер колдоно алабы?</button><p>Ооба, сабак планы жана көзөмөл куралдары бар.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="section light" id="contact">
+  <div class="container split">
+    <div>
+      <h2>Байланыш</h2>
+      <p class="lead">Суроо бар болсо, жазыңыз.</p>
+      <p>📧 info@itedu.example<br>📍 Бишкек, Кыргызстан</p>
+      <div class="social"><a href="#" aria-label="Telegram">✈️</a><a href="#" aria-label="Instagram">📷</a><a href="#" aria-label="YouTube">▶️</a></div>
+    </div>
+    <form id="form" class="glass form" novalidate>
+      <label>Атыңыз<input name="name" type="text" required autocomplete="name"></label>
+      <label>Email<input name="email" type="email" required autocomplete="email"></label>
+      <label>Билдирүү<textarea name="msg" rows="4" required></textarea></label>
+      <p class="status" id="status" role="status"></p>
+      <button class="btn btn-primary" type="submit">Жөнөтүү</button>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="container foot">
+    <div><a href="#home" class="logo">IT<span>EDU</span></a><p>IT окутуунун заманбап методдору боюнча билим платформасы.</p></div>
+    <div><h4>Навигация</h4><a href="#methods">Методдор</a><a href="#courses">Курстар</a><a href="#contact">Байланыш</a></div>
+    <div><h4>Курстар</h4><a href="#courses">HTML &amp; CSS</a><a href="#courses">JavaScript</a><a href="#courses">Python</a></div>
+    <div class="social"><a href="#" aria-label="Telegram">✈️</a><a href="#" aria-label="Instagram">📷</a><a href="#" aria-label="YouTube">▶️</a></div>
+  </div>
+  <p class="copy">© 2026 IT EDU. Бардык укуктар корголгон.</p>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="Жогору чыгуу">↑</button>
+<script>
+/* IT EDU — vanilla JS */
+(() => {
+  'use strict';
+  const $ = (s, c = document) => c.querySelector(s);
+  const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+
+  /* ---------- Data-driven cards ---------- */
+  const methods = [
+    ['🛠️', 'Практикалык окутуу', 'Теорияны практика менен айкалыштыруу', 'Ар бир темадан кийин реалдуу тапшырма аткарасың.'],
+    ['📦', 'Project-Based Learning', 'Реалдуу долбоорлор аркылуу үйрөнүү', 'Портфолио түзүп, иш берүүчүгө көрсөтө аласың.'],
+    ['🧠', 'Problem-Based Learning', 'Маселени чечүү аркылуу билим алуу', 'Чыныгы маселелерди чечип, ой жүгүртүүнү өнүктүрөсүң.'],
+    ['🎛️', 'Interactive Learning', 'Quiz, animation жана интерактивдүү тапшырмалар', 'Билимиңди ошол замат текшерип турасың.'],
+    ['👥', 'Peer Learning', 'Студенттердин бири-бирине билим берүүсү', 'Башкага түшүндүрүү — эң мыкты үйрөнүү жолу.'],
+    ['🎮', 'Gamification', 'Баллдар, деңгээлдер, badges жана achievements', 'XP жыйнап, деңгээлиңди көтөрүп барасың.']
+  ];
+  const courses = [
+    ['🌐', 'HTML & CSS', 'Баштоочу', 24, 80], ['⚙️', 'JavaScript', 'Орто', 32, 55],
+    ['🧱', 'Frontend Development', 'Орто', 40, 35], ['🎨', 'UI/UX Design', 'Баштоочу', 18, 60],
+    ['🐍', 'Python', 'Баштоочу', 30, 70], ['🕸️', 'Web Development', 'Жогорку', 48, 20]
+  ];
+  $('#methodGrid').innerHTML = methods.map(([i, t, d, x]) => `
+    <article class="card reveal"><span class="ico">${i}</span><h3>${t}</h3><p>${d}</p>
+    <div class="extra">${x}</div>
+    <button class="more" aria-expanded="false">Кененирээк</button></article>`).join('');
+  $('#courseGrid').innerHTML = courses.map(([i, t, l, n, p]) => `
+    <article class="card reveal"><span class="ico">${i}</span><h3>${t}</h3>
+    <p><span class="tag">${l}</span> &nbsp;${n} сабак</p>
+    <div class="bar-track"><div class="fill" data-w="${p}"></div></div>
+    <small>${p}%</small><br><br><a href="#contact" class="btn btn-primary">Курска өтүү</a></article>`).join('');
+
+  /* ---------- Mobile menu ---------- */
+  const burger = $('#burger'), menu = $('#menu');
+  const closeMenu = () => { menu.classList.remove('open'); burger.setAttribute('aria-expanded', 'false'); };
+  burger.addEventListener('click', () => {
+    const open = menu.classList.toggle('open');
+    burger.setAttribute('aria-expanded', open);
+  });
+  $$('a', menu).forEach(a => a.addEventListener('click', closeMenu));
+
+  /* ---------- Theme toggle (remembered) ---------- */
+  const root = document.documentElement;
+  try { root.dataset.theme = localStorage.getItem('theme') || 'dark'; } catch (e) {}
+  $('#themeBtn').addEventListener('click', () => {
+    root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('theme', root.dataset.theme); } catch (e) {}
+  });
+
+  /* ---------- Reveal, progress bars, counters ---------- */
+  const count = el => {
+    const to = +el.dataset.to; let n = 0;
+    const step = () => { n += Math.ceil(to / 40); el.textContent = Math.min(n, to); if (n < to) requestAnimationFrame(step); };
+    step();
+  };
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    const t = e.target; t.classList.add('in');
+    $$('.fill', t).forEach(f => f.style.width = f.dataset.w + '%');
+    if (t.classList.contains('fill')) t.style.width = t.dataset.w + '%';
+    if (t.classList.contains('count')) count(t);
+    io.unobserve(t);
+  }), { threshold: .2 });
+  $$('.reveal, .count, .hero .stats').forEach(el => io.observe(el));
+  $$('.timeline li').forEach((li, i) => li.style.transitionDelay = i * 120 + 'ms'); // staggered steps
+
+  /* ---------- Expand card details & FAQ ---------- */
+  document.addEventListener('click', e => {
+    const more = e.target.closest('.more');
+    if (more) {
+      const card = more.closest('.card'), o = card.classList.toggle('open');
+      more.setAttribute('aria-expanded', o);
+      more.textContent = o ? 'Жабуу' : 'Кененирээк';
+    }
+    const q = e.target.closest('.faq-item button');
+    if (q) q.setAttribute('aria-expanded', q.parentElement.classList.toggle('open'));
+  });
+
+  /* ---------- Scroll: active link, back-to-top ---------- */
+  const links = $$('.menu a'), secs = links.map(a => $(a.getAttribute('href')));
+  const toTop = $('#toTop');
+  addEventListener('scroll', () => {
+    const y = scrollY + 120;
+    secs.forEach((s, i) => links[i].classList.toggle('active', s && s.offsetTop <= y && s.offsetTop + s.offsetHeight > y));
+    toTop.classList.toggle('show', scrollY > 600);
+  }, { passive: true });
+  toTop.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
+
+  /* ---------- Form validation ---------- */
+  const form = $('#form'), status = $('#status');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    let ok = true;
+    $$('input,textarea', form).forEach(f => {
+      const bad = !f.value.trim() || (f.type === 'email' && !/^\S+@\S+\.\S+$/.test(f.value));
+      f.classList.toggle('err', bad); f.setAttribute('aria-invalid', bad); if (bad) ok = false;
+    });
+    status.textContent = ok ? '✅ Рахмат! Билдирүүңүз жөнөтүлдү.' : '⚠️ Бардык талааларды туура толтуруңуз.';
+    if (ok) form.reset();
+  });
+})();
+
+</script>
+</body>
+</html>
